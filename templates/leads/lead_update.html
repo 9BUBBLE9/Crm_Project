@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать лид</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"  rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Редактировать лид</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Имя клиента</label>
+            <input type="text" name="name" value="{{ lead.name }}" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Статус</label>
+            <select name="status" class="form-select">
+                <option value="new" {% if lead.status == 'new' %}selected{% endif %}>Новый</option>
+                <option value="interested" {% if lead.status == 'interested' %}selected{% endif %}>Клиент заинтересован в услуге</option>
+                <option value="converted" {% if lead.status == 'converted' %}selected{% endif %}>Перевоз</option>
+                <option value="canceled" {% if lead.status == 'canceled' %}selected{% endif %}>Отказ</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Информация о клиенте</label>
+            <textarea name="information" class="form-control">{{ lead.information }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Исполнитель</label>
+            <select name="assignee" class="form-select">
+                <option value="">Не назначен</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}" {% if user.id == lead.assignee.id %}selected{% endif %}>{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+</body>
+</html>
